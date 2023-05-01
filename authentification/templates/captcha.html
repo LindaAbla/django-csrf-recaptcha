@@ -1,0 +1,22 @@
+<div class="g-recaptcha" data-sitekey="6LcL5MgkAAAAAK9YOPb9j437SEE1BcJEENmct_81"></div>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<form id="login-form" method="POST" action="{% url 'admin' %}"> 
+    <!-- #***** -->
+  {% csrf_token %}
+  <div class="input-field">
+      <input type="submit" class="submit" value="Login" onclick="submitForm()">
+  </div>
+</form>
+
+<script>
+function submitForm() {
+    var response = grecaptcha.getResponse();
+    if (response.length == 0) {
+        alert("Please complete the reCAPTCHA");
+        return false;
+    } else {
+        document.getElementById("login-form").submit();
+    }
+}
+</script>
