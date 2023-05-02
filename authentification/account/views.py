@@ -86,8 +86,7 @@ def dashboard(request):
     user_agent_string = request.headers.get('User-Agent')
     user_agent = parse(user_agent_string)
     device_type = ''
-    print('osss',user_agent.os.family)
-    if user_agent.os.family == 'Mac':
+    if user_agent.os.family == 'iOS' or user_agent.os.family == 'Mac':
         return render(request, 'admin.html',  {})
     else:
         device_type = 'Desktop device'
