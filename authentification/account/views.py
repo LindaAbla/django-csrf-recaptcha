@@ -93,14 +93,15 @@ def dashboard(request):
     context = {'device_type': device_type}
     print(context)
     if device_type == 'Desktop device':
+        print('request.method*******',request.method)
         # Show the captcha form for other devices
-        if request.method == 'GET':
+        if request.method == 'POST':
             # Check the captcha
-            captcha_response = request.POST.get('captcha-response') #*****
+            captcha_response = request.POST.get('h-captcha-response')
             print('captchaa',captcha_response)
             if captcha_response:
                 # If the captcha is validated, redirect to dashboard
-                return redirect('dashboard') #*****
+                return redirect('admin') #*****
             else:
                 context['error'] = True
                 context['message'] = 'Please complete the captcha'

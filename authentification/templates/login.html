@@ -42,7 +42,6 @@
                   </h2>
 
                   <form action="{% url 'sing_in' %}" method="POST">
-                    {% csrf_token %}
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                       <input type="email" id="form1Example1" class="form-control" name="email" required />

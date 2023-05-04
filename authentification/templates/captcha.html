@@ -1,22 +1,67 @@
-<div class="g-recaptcha" data-sitekey="6LcL5MgkAAAAAK9YOPb9j437SEE1BcJEENmct_81"></div>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>hCaptcha | Login</title>
+    <!-- Ajouter le script hcaptcha -->
+    <script src="https://hcaptcha.com/1/api.js" async defer></script>
+</head>
+<body>
+    <form id="login-form" method="POST" action="{% url 'admin' %}">
+        <div class="box">
+            <div class="container">
+                <div class="top">
+                    <div class="input-field">
+                        <input type="submit" class="submit" value="Login" id="login-button">
+                    </div>
+                    <div class="two-col">
+                        <div class="one">
+                            <input type="checkbox" name="remember_me" id="check">
+                            <label for="check"> Remember Me</label>
+                        </div>
+                        <div class="two">
+                            <label><a href="#">Forgot password?</a></label>
+                        </div>
+                    </div>
+                    <!-- Insérer le captcha hcaptcha sur votre page -->
+                    <div class="h-captcha" data-sitekey="35f9f060-3d0d-4bbc-969d-a57d9d35699e"></div>
+                </div>
+            </div>
+        </div>
+    </form>
 
-<form id="login-form" method="POST" action="{% url 'admin' %}"> 
-    <!-- #***** -->
-  {% csrf_token %}
-  <div class="input-field">
-      <input type="submit" class="submit" value="Login" onclick="submitForm()">
-  </div>
-</form>
+    <script src="https://privacy-pass.com/client.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            // Empêcher le comportement par défaut de l'événement de clic
+            event.preventDefault();
 
-<script>
-function submitForm() {
-    var response = grecaptcha.getResponse();
-    if (response.length == 0) {
-        alert("Please complete the reCAPTCHA");
-        return false;
-    } else {
-        document.getElementById("login-form").submit();
-    }
-}
-</script>
+            // Vérifier si le captcha est valide
+            const captchaResponse = window.hcaptcha.getResponse();
+            if (!captchaResponse) {
+                alert('Please complete the captcha');
+                return;
+            }
+
+            // Envoyer une requête POST à la vue dashboard
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/admin', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    // Rediriger l'utilisateur vers la page de tableau de bord après la connexion réussie
+                    window.location.href = '/admin';
+                } else if (xhr.readyState === XMLHttpRequest.DONE && xhr.status !== 200) {
+                    alert('Failed to login. Please try again.');
+                }
+            };
+            xhr.send('&remember_me=' + encodeURIComponent(document.getElementsByName('remember_me')[0].checked) +
+                     '&captcha_response=' + encodeURIComponent(captchaResponse));
+        });
+    </script>
+</body>
+</html>
