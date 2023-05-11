@@ -80,7 +80,9 @@ def sing_up(request):
 #         return user_agent.os.version_string
 #     else:
 #         return 'Unknown'
-    
+import privacypass
+import requests
+@login_required(login_url='sing_in')
 @login_required(login_url='sing_in')
 def dashboard(request):
     user_agent_string = request.headers.get('User-Agent')
@@ -109,6 +111,18 @@ def dashboard(request):
 
 def admin_d(request):
     return render(request, 'admin.html')
+
+def help(request):
+    return render(request, 'help.html')
+
+def signin(request):
+    return render(request, 'signin.html')
+
+def captcha(request):
+    return render(request, 'captcha.html')
+
+def dashboardd(request):
+    return render(request, 'dashboard.html')
 
 def log_out(request):
     logout(request)
